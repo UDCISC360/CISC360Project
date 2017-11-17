@@ -16,7 +16,6 @@
 }*/
 void bubbleSort_Par(int arr[], int n, int threads)
 {
-	int temp;
 	for (int k = 0; k <= n-2; k++)
 	{
 		#pragma omp parallel shared(arr, n) num_threads(threads)
@@ -26,9 +25,9 @@ void bubbleSort_Par(int arr[], int n, int threads)
 			{
 				if (arr[2 * i] > arr[2 * i + 1])
 				{
-					temp = arr[2 * i];
-					arr[2 * i] = arr[2 * i + 1];
-					arr[2 * i + 1] = temp;
+					int temp = &arr[2 * i];
+					&arr[2 * i] = &arr[2 * i + 1];
+					&arr[2 * i + 1] = temp;
 				}
 			}
 		}
@@ -38,9 +37,9 @@ void bubbleSort_Par(int arr[], int n, int threads)
 			{
 				if (arr[2 * i + 1] > arr[2 * i + 2])
 				{
-					temp = arr[2 * i + 1];
-					arr[2 * i + 1] = arr[2 * i + 2];
-					arr[2 * i + 2] = temp;
+					int temp = &arr[2 * i + 1];
+					&arr[2 * i + 1] = &arr[2 * i + 2];
+					&arr[2 * i + 2] = temp;
 				}
 			}
 		}
@@ -114,7 +113,7 @@ int shellSort(int arr[], int n)
 }
 */
 
-void print_array(int n, double array[]) {
+void print_array(int n, int array[]) {
   int i;
   printf("[%.0f", array[0]);
   for (i = 1; i < n; i++) {
@@ -122,7 +121,7 @@ void print_array(int n, double array[]) {
   }
   printf("]\n");
 }
-void test_correctness(int n, double array[]) {
+void test_correctness(int n, int array[]) {
   int i;
   for (i = 1; i < n; i++) {
     if (array[i] < array[i - 1]) {
@@ -130,7 +129,7 @@ void test_correctness(int n, double array[]) {
     }
   }
 }
-void init_random_vector(int n, double array[]) {
+void init_random_vector(int n, int array[]) {
   int i;
   for (i = 0; i < n; i++) {
     array[i] = rand();
