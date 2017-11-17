@@ -151,6 +151,8 @@ int main(){
 	bubbleSort_Par(array, n, threads);
 	double endBubble = omp_get_wtime();
 	
+	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endBubble - startBubble));
+	
 	if (n < 10000)
 	{
 		test_correctness(n, array);
