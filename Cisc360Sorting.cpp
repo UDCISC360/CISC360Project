@@ -25,9 +25,9 @@ void bubbleSort_Par(int arr[], int n, int threads)
 			{
 				if (arr[2 * i] > arr[2 * i + 1])
 				{
-					int temp = &arr[2 * i];
-					&arr[2 * i] = &arr[2 * i + 1];
-					&arr[2 * i + 1] = temp;
+					int temp = arr[2 * i];
+					arr[2 * i] = arr[2 * i + 1];
+					arr[2 * i + 1] = temp;
 				}
 			}
 		}
@@ -35,11 +35,11 @@ void bubbleSort_Par(int arr[], int n, int threads)
 			#pragma omp for
 			for (int j = 0; j <= (n/2)-2; j++)
 			{
-				if (arr[2 * i + 1] > arr[2 * i + 2])
+				if (arr[2 * j + 1] > arr[2 * j + 2])
 				{
-					int temp = &arr[2 * i + 1];
-					&arr[2 * i + 1] = &arr[2 * i + 2];
-					&arr[2 * i + 2] = temp;
+					int temp = arr[2 * j + 1];
+					arr[2 * j + 1] = arr[2 * j + 2];
+					arr[2 * j + 2] = temp;
 				}
 			}
 		}
@@ -147,11 +147,13 @@ int main(){
 	
 	init_random_vector(n, array);
 	
-	double startBubble = omp_get_wtime();
+	//double startBubble = omp_get_wtime();
+	print_array(n, array); x
 	bubbleSort_Par(array, n, threads);
-	double endBubble = omp_get_wtime();
+	print_array(n, array); 
+	//double endBubble = omp_get_wtime();
 	
-	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endBubble - startBubble));
+	//printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endBubble - startBubble));
 	
 	if (n < 10000)
 	{
@@ -160,4 +162,5 @@ int main(){
 	
 	free(array);
 	return 0;
+	
 }

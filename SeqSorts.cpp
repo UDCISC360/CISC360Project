@@ -1,5 +1,28 @@
 //Author Eric
 //CPP Code for various sorts
+
+#include <cstdlib>
+#include <utility>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int main(){
+
+  return 0;
+
+}
+
+
+
+void swap(int *xp, int *yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+ 
+
 //Website linked above
 
 // A function to implement bubble sort
@@ -13,11 +36,24 @@ void bubbleSort(int arr[], int n)
        // Last i elements are already in place   
        for (j = 0; j < n-i-1; j++) 
            if (arr[j] > arr[j+1])
-              swap(&arr[j], &arr[j+1]);
+	     swap(&arr[j], &arr[j+1]);
 }
 
 
-//http://www.geeksforgeeks.org/comb-sort/
+//https://en.wikibooks.org/wiki/Algorithm_Implementation/Sorting/Comb_sort
+// Function to sort a[0..n-1] using Comb Sort
+
+// To find gap between elements
+int getNextGap(int gap)
+{
+    // Shrink gap by Shrink factor
+    gap = (gap*10)/13;
+ 
+    if (gap < 1)
+        return 1;
+    return gap;
+}
+ 
 // Function to sort a[0..n-1] using Comb Sort
 void combSort(int a[], int n)
 {
@@ -44,13 +80,14 @@ void combSort(int a[], int n)
         {
             if (a[i] > a[i+gap])
             {
-                swap(a[i], a[i+gap]);
-                swapped = true;
+	      int temp = a[i];
+	      a[i] = a[i+gap];
+	      a[i+gap] = temp; 
+              swapped = true;
             }
         }
     }
 }
-
 //https://geeksforgeeks.org/shellsort
 /* function to sort arr using shellSort */
 int shellSort(int arr[], int n)
