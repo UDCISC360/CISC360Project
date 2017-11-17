@@ -4,7 +4,7 @@
 #include <string.h>
 
 //http://www.geeksforgeeks.org/bubble-sort/
-/*void bubbleSort(int arr[], int n)
+void bubbleSort(int arr[], int n)
 {
    int i, j;
    for (i = 0; i < n-1; i++)      
@@ -12,8 +12,11 @@
        // Last i elements are already in place   
        for (j = 0; j < n-i-1; j++) 
            if (arr[j] > arr[j+1])
-              swap(&arr[j], &arr[j+1]);
-}*/
+              //swap(&arr[j], &arr[j+1]);
+				int temp = arr[j];
+				arr[j] = arr[j+1];
+				arr[j+1] = temp;
+}
 void bubbleSort_Par(int arr[], int n, int threads)
 {
 	for (int k = 0; k <= n-2; k++)
@@ -147,13 +150,13 @@ int main(){
 	
 	init_random_vector(n, array);
 	
-	//double startBubble = omp_get_wtime();
+	double startBubble = omp_get_wtime();
 	print_array(n, array);
 	bubbleSort_Par(array, n, threads);
 	print_array(n, array); 
-	//double endBubble = omp_get_wtime();
+	double endBubble = omp_get_wtime();
 	
-	//printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endBubble - startBubble));
+	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endBubble - startBubble));
 	
 	if (n < 10000)
 	{
@@ -161,6 +164,26 @@ int main(){
 	}
 	
 	free(array);
+	
+	
+	int *seqArray = (int *)malloc(sizeof(int) * n);
+	
+	init_random_vector(n, seqArray);
+	
+	double startSeqBubble = omp_get_wtime();
+	print_array(n, seqArray);
+	bubbleSort(seqArray, n);
+	print_array(n, seqArray); 
+	double endSeqBubble = omp_get_wtime();
+	
+	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endSeqBubble - startSeqBubble));
+	
+	if (n < 10000)
+	{
+		test_correctness(n, seqArray);
+	}
+	
+	
 	return 0;
 	
 }
