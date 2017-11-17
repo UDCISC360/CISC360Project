@@ -115,9 +115,9 @@ int shellSort(int arr[], int n)
 
 void print_array(int n, int array[]) {
   int i;
-  printf("[%.0f", array[0]);
+  printf("[%.d", array[0]);
   for (i = 1; i < n; i++) {
-    printf(", %.0f", array[i]);
+    printf(", %.d", array[i]);
   }
   printf("]\n");
 }
@@ -132,7 +132,7 @@ void test_correctness(int n, int array[]) {
 void init_random_vector(int n, int array[]) {
   int i;
   for (i = 0; i < n; i++) {
-    array[i] = rand();
+    array[i] = (rand() % 100);
   }
 }
 
@@ -148,7 +148,7 @@ int main(){
 	init_random_vector(n, array);
 	
 	//double startBubble = omp_get_wtime();
-	print_array(n, array); x
+	print_array(n, array);
 	bubbleSort_Par(array, n, threads);
 	print_array(n, array); 
 	//double endBubble = omp_get_wtime();
