@@ -4,7 +4,7 @@
 #include <string.h>
 
 //http://www.geeksforgeeks.org/bubble-sort/
-void bubbleSort_Seq(int arr[], int n)
+/*void bubbleSort(int arr[], int n)
 {
    int i, j;
    for (i = 0; i < n-1; i++)      
@@ -13,7 +13,7 @@ void bubbleSort_Seq(int arr[], int n)
        for (j = 0; j < n-i-1; j++) 
            if (arr[j] > arr[j+1])
               swap(&arr[j], &arr[j+1]);
-}
+}*/
 void bubbleSort_Par(int arr[], int n, int threads)
 {
 	int temp;
@@ -24,7 +24,7 @@ void bubbleSort_Par(int arr[], int n, int threads)
 			#pragma omp for
 			for (int i = 0; i <= (n/2)-1; i++)
 			{
-				if arr[2 * i] > arr[2 * i + 1]
+				if (arr[2 * i] > arr[2 * i + 1])
 				{
 					temp = arr[2 * i];
 					arr[2 * i] = arr[2 * i + 1];
@@ -36,7 +36,7 @@ void bubbleSort_Par(int arr[], int n, int threads)
 			#pragma omp for
 			for (int j = 0; j <= (n/2)-2; j++)
 			{
-				if arr[2 * i + 1] > arr[2 * i + 2]
+				if (arr[2 * i + 1] > arr[2 * i + 2])
 				{
 					temp = arr[2 * i + 1];
 					arr[2 * i + 1] = arr[2 * i + 2];
@@ -50,7 +50,7 @@ void bubbleSort_Par(int arr[], int n, int threads)
 
 //http://www.geeksforgeeks.org/comb-sort/
 // Function to sort a[0..n-1] using Comb Sort
-void combSort(int a[], int n)
+/*void combSort(int a[], int n)
 {
     // Initialize gap
     int gap = n;
@@ -81,9 +81,10 @@ void combSort(int a[], int n)
         }
     }
 }
-
+*/
 //https://geeksforgeeks.org/shellsort
 /* function to sort arr using shellSort */
+/*
 int shellSort(int arr[], int n)
 {
     // Start with a big gap, then reduce the gap
@@ -111,7 +112,7 @@ int shellSort(int arr[], int n)
     }
     return 0;
 }
-
+*/
 
 void print_array(int n, double array[]) {
   int i;
