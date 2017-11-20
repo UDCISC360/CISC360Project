@@ -13,7 +13,9 @@ int LEN_CONST_LEN = 7;
 int MAXVAL = 10000;
 
 int testArray[3] = {1, 10, 100};
-int testArrLen = 3; 
+int testArrLen = 3;
+std::clock_t start;
+double duration;
 
 void print_array(int n, int array[]) {
   int i;
@@ -36,14 +38,16 @@ void sortRun(int* lenArrs, int lenArrsLen,
       tbs[j] = (rand()%MAXVAL)+1;
     } 
 
-
-    //Start time here
     print_array(lenArrs[i],tbs); 
+    start = clock(); 
+  
     sortFun(tbs, lenArrs[i]);
+
+  
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    std::cout<<"printf: "<< duration <<'\n';
     print_array(lenArrs[i],tbs); 
-
-    //end & print time here
-
+    
 
   }
 
