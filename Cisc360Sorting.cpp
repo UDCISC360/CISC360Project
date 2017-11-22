@@ -19,16 +19,18 @@ void bubbleSort(int arr[], int n)
 }
 void bubbleSort_Par(int arr[], int n, int threads)
 {
-	for (int k = 0; k <= n-2; k++)
+	int k,i,j,temp;
+	#pragma omp parallel shared(arr, n) num_threads(threads)
+	for (k = 0; k <= n-2; k++)
 	{
-		#pragma omp parallel shared(arr, n) num_threads(threads)
+		//#pragma omp parallel shared(arr, n) num_threads(threads)
 		if (k % 2 == 0){
 			#pragma omp for
-			for (int i = 0; i <= (n/2)-1; i++)
+			for (i = 0; i <= (n/2)-1; i++)
 			{
 				if (arr[2 * i] > arr[2 * i + 1])
 				{
-					int temp = arr[2 * i];
+					temp = arr[2 * i];
 					arr[2 * i] = arr[2 * i + 1];
 					arr[2 * i + 1] = temp;
 				}
@@ -36,11 +38,11 @@ void bubbleSort_Par(int arr[], int n, int threads)
 		}
 		else{
 			#pragma omp for
-			for (int j = 0; j <= (n/2)-2; j++)
+			for (j = 0; j <= (n/2)-2; j++)
 			{
 				if (arr[2 * j + 1] > arr[2 * j + 2])
 				{
-					int temp = arr[2 * j + 1];
+					temp = arr[2 * j + 1];
 					arr[2 * j + 1] = arr[2 * j + 2];
 					arr[2 * j + 2] = temp;
 				}
@@ -51,8 +53,19 @@ void bubbleSort_Par(int arr[], int n, int threads)
 
 
 //http://www.geeksforgeeks.org/comb-sort/
+// To find gap between elements
+/*int getNextGap(int gap)
+{
+    // Shrink gap by Shrink factor
+    gap = (gap*10)/13;
+	if (gap == 9 || gap == 10)//take this out if doesn't run right.
+        gap = 11;//take this out if doesn't run right.
+    if (gap < 1)
+        return 1;
+    return gap;
+}
 // Function to sort a[0..n-1] using Comb Sort
-/*void combSort(int a[], int n)
+void combSort(int a[], int n)
 {
     // Initialize gap
     int gap = n;
@@ -82,8 +95,106 @@ void bubbleSort_Par(int arr[], int n, int threads)
             }
         }
     }
+}*/
+//http://www.sanfoundry.com/c-program-implement-comb-sort/
+/*Function to find the new gap between the elements*/
+int newgap(int gap)
+{
+    gap = (gap * 10) / 13;
+    if (gap == 9 || gap == 10)
+        gap = 11;
+    if (gap < 1)
+        gap = 1;
+    return gap;
 }
-*/
+ 
+/*Function to implement the combsort*/
+void combsort(int a[], int aSize)
+{
+    int gap = aSize;
+    int temp, i;
+    for (;;)
+    {
+        gap = newgap(gap);
+        int swapped = 0;
+        for (i = 0; i < aSize - gap; i++) 
+        {
+            int j = i + gap;
+            if (a[i] > a[j])
+            {
+                temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+                swapped  =  1;
+            }
+        }
+        if (gap  ==  1 && !swapped)
+            break;
+    }
+}
+void combSort_Par(int array[], int n, int threads)
+{
+    int gap = n;
+	int temp, i, swapped, j, m, n;
+    bool swapped = true;
+	#pragma omp parallel shared(array, n) num_threads(threads)
+	for(;;)//basically while(true)
+	{
+		gap = getNextGap(gap);
+		swapped = 0;
+		for(i = 0; i < n-gap; i++)
+		{
+			if(i%2 == 0)
+			{
+				#pragma omp for
+				for(m = 0; m < (n-gap)/2; m++)
+				{
+					j = m + gap;
+					if(array[m] > array[j])
+					//if(array[2*m] > array[j*2])
+					{
+						temp = array[m];
+						array[m] = array[j];
+						array[j] = temp;	
+						swapped = 1;
+						/*
+						temp = array[2*m];
+						array[2*m] = array[2*j];
+						array[2*j] = temp;
+						*/
+					}
+				}
+			}
+			else
+			{
+				#pragma omp for
+				for(n = 0; n < ((n-gap)/2)-1; n++)
+				{
+					j = n + gap;
+					if(array[n] > array[j])
+					//if(array[2*n] > array[2*j])
+					{
+						temp = array[n];
+						array[n] = array[j];
+						array[j] = temp;	
+						swapped = 1;
+						/*
+						temp = array[2*n];
+						array[2*n] = array[2*j];
+						array[2*j] = temp;
+						*/
+					}
+				}
+			}
+		}
+		if(gap == 1 && !swapped)
+		{
+			break;
+		}
+	}
+}
+
+
 //https://geeksforgeeks.org/shellsort
 /* function to sort arr using shellSort */
 /*
@@ -158,31 +269,29 @@ int main(){
 	
 	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endBubble - startBubble));
 	
-	if (n < 10000)
+	if (n < 50000)
 	{
 		test_correctness(n, array);
 	}
 	
 	free(array);
 	
+	int *combArray = (int *)malloc(sizeof(int) * n);
 	
-	int *seqArray = (int *)malloc(sizeof(int) * n);
+	init_random_vector(n, combArray);
 	
-	init_random_vector(n, seqArray);
+	double startComb = omp_get_wtime();
+	print_array(n, combArray);
+	combSort_Par(combArray, n, threads);
+	print_array(n, combArray); 
+	double endComb = omp_get_wtime();
 	
-	double startSeqBubble = omp_get_wtime();
-	print_array(n, seqArray);
-	bubbleSort(seqArray, n);
-	print_array(n, seqArray); 
-	double endSeqBubble = omp_get_wtime();
+	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endComb - startComb));
 	
-	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endSeqBubble - startSeqBubble));
-	
-	if (n < 10000)
+	if (n < 50000)
 	{
-		test_correctness(n, seqArray);
+		test_correctness(n, combArray);
 	}
-	
 	
 	return 0;
 	
