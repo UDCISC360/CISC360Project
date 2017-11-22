@@ -58,8 +58,6 @@ void bubbleSort_Par(int arr[], int n, int threads)
 {
     // Shrink gap by Shrink factor
     gap = (gap*10)/13;
-	if (gap == 9 || gap == 10)//take this out if doesn't run right.
-        gap = 11;//take this out if doesn't run right.
     if (gap < 1)
         return 1;
     return gap;
@@ -140,7 +138,7 @@ void combSort_Par(int array[], int n, int threads)
 	#pragma omp parallel shared(array, n) num_threads(threads)
 	for(;;)//basically while(true)
 	{
-		gap = getNextGap(gap);
+		gap = newgap(gap);
 		swapped = 0;
 		for(i = 0; i < n-gap; i++)
 		{
