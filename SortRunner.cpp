@@ -38,15 +38,15 @@ void sortRun(int* lenArrs, int lenArrsLen,
       tbs[j] = (rand()%MAXVAL)+1;
     } 
 
-    print_array(lenArrs[i],tbs); 
+    // print_array(lenArrs[i],tbs); 
     start = clock(); 
   
     sortFun(tbs, lenArrs[i]);
 
   
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    std::cout<<"printf: "<< duration <<'\n';
-    print_array(lenArrs[i],tbs); 
+    std::cout<<"time: "<< duration <<'\n';
+    //print_array(lenArrs[i],tbs); 
     
 
   }
@@ -132,7 +132,7 @@ void combSort(int a[], int n)
 }
 //https://geeksforgeeks.org/shellsort
 /* function to sort arr using shellSort */
-int shellSort(int arr[], int n)
+void shellSort(int arr[], int n)
 {
     // Start with a big gap, then reduce the gap
     for (int gap = n/2; gap > 0; gap /= 2)
@@ -157,12 +157,18 @@ int shellSort(int arr[], int n)
             arr[j] = temp;
         }
     }
-    return 0;
+    return;
 }
  
 int main(){
 
-  sortRun(testArray, testArrLen, bubbleSort);
+  printf("Running BubbleSort Tests\n"); 
+  sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort);
+  printf("Running ShellSort Tests\n");
+  sortRun(LEN_CONST, LEN_CONST_LEN, shellSort);
+  printf("Running Combsort Tests\n"); 
+  sortRun(LEN_CONST, LEN_CONST_LEN, combSort);
+  printf("Done tests\n"); 
   return 0; 
 
 }
