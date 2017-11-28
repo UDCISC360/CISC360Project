@@ -21,9 +21,9 @@ void bubbleSort_Par(int arr[], int n, int threads)
 {
 	int k,i,j,temp;
 	#pragma omp parallel shared(arr, n) num_threads(threads)
+	//i think i need to add private(i, j, temp) k is shared?
 	for (k = 0; k <= n-2; k++)
 	{
-		//#pragma omp parallel shared(arr, n) num_threads(threads)
 		if (k % 2 == 0){
 			#pragma omp for
 			for (i = 0; i <= (n/2)-1; i++)
@@ -133,9 +133,11 @@ void combsort(int a[], int aSize)
 void combSort_Par(int array[], int n, int threads)
 {
     int gap = n;
-	int temp, i, swapped, j, m, n;
+	int temp, i, swapped, j, m;
     bool swapped = true;
 	#pragma omp parallel shared(array, n) num_threads(threads)
+	//i think i need to add private(temp, j, m, n)
+	//swapped is shared? gap is shared? make i shared?
 	for(;;)//basically while(true)
 	{
 		gap = newgap(gap);
@@ -195,7 +197,7 @@ void combSort_Par(int array[], int n, int threads)
 
 //https://geeksforgeeks.org/shellsort
 /* function to sort arr using shellSort */
-/*
+
 int shellSort(int arr[], int n)
 {
     // Start with a big gap, then reduce the gap
@@ -223,8 +225,31 @@ int shellSort(int arr[], int n)
     }
     return 0;
 }
-*/
-
+//start of shell sort parallel
+//https://stackoverflow.com/questions/5903208/shell-sort-in-openmp
+void insertionsort(int a[], int n, int stride) 
+{//since shellsort basically uses a bunch of insertion sorts
+    for (int j=stride; j<n; j+=stride) {
+        int key = a[j];
+        int i = j - stride;
+        while (i >= 0 && a[i] > key) {
+            a[i+stride] = a[i];
+            i-=stride;
+        }
+        a[i+stride] = key;
+    }
+}
+void shellSort_Par(int a[], int n, int threads)
+{
+    int i, m;
+	#pragme omp parallel shared(a,m,n) private(i) num_threads(threads)
+    for(m = n/2; m > 0; m /= 2)
+    {
+            #pragma omp for
+            for(i = 0; i < m; i++)
+                insertionsort(&(a[i]), n-i, m);
+    }
+}
 void print_array(int n, int array[]) {
   int i;
   printf("[%.d", array[0]);
@@ -265,7 +290,7 @@ int main(){
 	print_array(n, array); 
 	double endBubble = omp_get_wtime();
 	
-	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endBubble - startBubble));
+	printf("BubbleSort: Total time to solve with %d OpenMP threads was %.6f\n", threads, (endBubble - startBubble));
 	
 	if (n < 50000)
 	{
@@ -284,12 +309,33 @@ int main(){
 	print_array(n, combArray); 
 	double endComb = omp_get_wtime();
 	
-	printf("Total time to solve with %d OpenMP threads was %.6f\n", threads, (endComb - startComb));
+	printf("CombSort: Total time to solve with %d OpenMP threads was %.6f\n", threads, (endComb - startComb));
 	
 	if (n < 50000)
 	{
 		test_correctness(n, combArray);
 	}
+	
+	free(combArray);
+	
+	int *shellArray = (int *)malloc(sizeof(int) * n);
+	
+	init_random_vector(n, shellArray);
+	
+	double startShell = omp_get_wtime();
+	print_array(n, shellArray);
+	shellSort_Par(shellArray, n, threads);
+	print_array(n, shellArray); 
+	double endShell = omp_get_wtime();
+	
+	printf("ShellSort: Total time to solve with %d OpenMP threads was %.6f\n", threads, (endShell - startShell));
+	
+	if (n < 50000)
+	{
+		test_correctness(n, shellArray);
+	}
+	
+	free(shellArray);
 	
 	return 0;
 	
