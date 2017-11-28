@@ -242,7 +242,7 @@ void insertionsort(int a[], int n, int stride)
 void shellSort_Par(int a[], int n, int threads)
 {
     int i, m;
-	#pragme omp parallel shared(a,m,n) private(i) num_threads(threads)
+    #pragme omp parallel shared(a,m,n) private(i) num_threads(threads)
     for(m = n/2; m > 0; m /= 2)
     {
             #pragma omp for
