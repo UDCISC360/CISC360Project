@@ -26,6 +26,27 @@ void print_array(int n, int array[]) {
   printf("]\n");
 }
 
+void sortRunPar(int * lenArrs, int lenArrsLen,
+		int threads, void (*sortFun)(int*, int, int)){
+  for(int i = 0; i < lenArrsLen; i++){
+    //loop for each Len in LEN_CONST
+    //create a new array, populate array
+    int* tbs = new int [lenArrs[i]];
+    for(int j =0; j<lenArrs[i]; j++){
+      tbs[j] = (rand()%MAXVAL)+1;
+    }
+    // print_array(lenArrs[i],tbs); 
+    start = clock(); 
+  
+    sortFun(tbs, lenArrs[i], threads);
+
+  
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    std::cout<<"time: "<< duration <<'\n';
+    //print_array(lenArrs[i],tbs); 
+
+}
+
 
 void sortRun(int* lenArrs, int lenArrsLen,
 	     void (*sortFun)(int*, int) ){
