@@ -20,7 +20,7 @@ void bubbleSort(int arr[], int n)
 void bubbleSort_Par(int arr[], int n, int threads)
 {
 	int k,i,j,temp;
-	#pragma omp parallel shared(arr, n) num_threads(threads)
+	#pragma omp parallel shared(arr, n, k) private(i, j, temp) num_threads(threads)
 	//i think i need to add private(i, j, temp) k is shared?
 	for (k = 0; k <= n-2; k++)
 	{
@@ -133,7 +133,7 @@ void combsort(int a[], int aSize)
 void combSort_Par(int array[], int n, int threads)
 {
     int gap = n;
-	int temp, i, j, m;
+	int temp, i, j, m, h;
     bool swapped = true;
 	#pragma omp parallel shared(array, n) num_threads(threads)
 	//i think i need to add private(temp, j, m, n)
@@ -168,19 +168,19 @@ void combSort_Par(int array[], int n, int threads)
 			else
 			{
 				#pragma omp for
-				for(n = 0; n < ((n-gap)/2)-1; n++)
+				for(h = 0; h < ((n-gap)/2)-1; n++)
 				{
-					j = n + gap;
-					if(array[n] > array[j])
-					//if(array[2*n] > array[2*j])
+					j = h + gap;
+					if(array[h] > array[j])
+					//if(array[2*h] > array[2*j])
 					{
-						temp = array[n];
-						array[n] = array[j];
+						temp = array[h];
+						array[h] = array[j];
 						array[j] = temp;	
 						swapped = 1;
 						/*
-						temp = array[2*n];
-						array[2*n] = array[2*j];
+						temp = array[2*h];
+						array[2*h] = array[2*j];
 						array[2*j] = temp;
 						*/
 					}
@@ -275,8 +275,8 @@ void init_random_vector(int n, int array[]) {
 
 
 int main(){
-	int n = 10; //size of array
-	int threads = 32; //number of threads
+	int n = 32; //size of array
+	int threads = 4; //number of threads
 	int seed = 0; //seed is initial value given to random sequence generator
 	srand(seed); //random number generator
 	
@@ -299,7 +299,7 @@ int main(){
 	
 	free(array);
 	
-	int *combArray = (int *)malloc(sizeof(int) * n);
+	/*int *combArray = (int *)malloc(sizeof(int) * n);
 	
 	init_random_vector(n, combArray);
 	
@@ -336,7 +336,7 @@ int main(){
 	}
 	
 	free(shellArray);
-	
+	*/
 	return 0;
 	
 }
