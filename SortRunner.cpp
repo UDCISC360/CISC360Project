@@ -7,7 +7,7 @@
 #include <algorithm>
 
 
-
+int ITERATE = 10; //number of iterations for each test. 
 int LEN_CONST [7] = {1, 5, 10, 100, 1000, 10000, 100000};
 int LEN_CONST_LEN = 7;
 int MAXVAL = 10000;
@@ -15,6 +15,8 @@ int MAXVAL = 10000;
 int testArray[3] = {1, 10, 100};
 int testArrLen = 3;
 std::clock_t start;
+std::clock_t end; 
+double durationAvg;
 double duration;
 
 void print_array(int n, int array[]) {
@@ -26,54 +28,38 @@ void print_array(int n, int array[]) {
   printf("]\n");
 }
 
-void sortRunPar(int * lenArrs, int lenArrsLen,
-		int threads, void (*sortFun)(int*, int, int)){
-  for(int i = 0; i < lenArrsLen; i++){
-    //loop for each Len in LEN_CONST
-    //create a new array, populate array
-    int* tbs = new int [lenArrs[i]];
-    for(int j =0; j<lenArrs[i]; j++){
-      tbs[j] = (rand()%MAXVAL)+1;
-    }
-    // print_array(lenArrs[i],tbs); 
-    start = clock(); 
-  
-    sortFun(tbs, lenArrs[i], threads);
 
-  
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    std::cout<<"time: "<< duration <<'\n';
-    //print_array(lenArrs[i],tbs); 
+int * generateRandomArray(int len){
 
 }
 
-
-void sortRun(int* lenArrs, int lenArrsLen,
-	     void (*sortFun)(int*, int) ){
-
-  for(int i = 0; i < lenArrsLen; i++){
-    //loop for each Len in LEN_CONST
-    //create a new array, populate array
-    int* tbs = new int [lenArrs[i]];
-    for(int j =0; j<lenArrs[i]; j++){
-      tbs[j] = (rand()%MAXVAL)+1;
-    } 
-
-    // print_array(lenArrs[i],tbs); 
-    start = clock(); 
-  
-    sortFun(tbs, lenArrs[i]);
-
-  
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    std::cout<<"time: "<< duration <<'\n';
-    //print_array(lenArrs[i],tbs); 
+void sortRun(int* lenArrs, int lenArrsLen, void (*sortFun)(int*, int) ){
+  duration = 0;
+  durationAvg = 0; 
+    for(int i = 0; i < lenArrsLen; i++){
+       for(int k = 0; k < ITERATE; k++){
+	 //loop for each Len in LEN_CONST
+	 //create a new array, populate array
+	 int* tbs = new int [lenArrs[i]];
+	 for(int j =0; j<lenArrs[i]; j++){
+	   tbs[j] = (rand()%MAXVAL)+1;
+	 } 
+	 // print_array(lenArrs[i],tbs); 
+	 start = clock(); 
+	 sortFun(tbs, lenArrs[i]);
+	 end = clock(); 
+	 durationAvg += ( end - start ) / (double) CLOCKS_PER_SEC;
+      //print_array(lenArrs[i],tbs);
+       }
+       duration = durationAvg/ITERATE;
+       std::cout<<"time: "<< duration<<" length: " << lenArrs[i]<<'\n';
+       
+    }
     
+}
 
-  }
 
-
-} 
+ 
 
 
   
