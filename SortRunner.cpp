@@ -31,19 +31,39 @@ void print_array(int n, int array[]) {
 
 int * generateRandomArray(int len){
 
+  int * tbr = new int [len];
+  for(int k = 0; k< len; k++){
+    tbr[k] = (rand()%MAXVAL)+1;
+  }
+  return tbr; 
 }
 
-void sortRun(int* lenArrs, int lenArrsLen, void (*sortFun)(int*, int) ){
+int * generateSortedArray(int len){
+  int * tbr = new int [len];
+  for (int k = 0; k < len; k++){
+    tbr[k] = k; 
+  }
+  return tbr;
+}
+
+int * generateBackwardsArray(int len){
+  int * tbr = new int[len];
+  for (int k = 0; k< len; k++){
+    tbr[k] = len-k;
+  }
+  return tbr; 
+} 
+  
+
+void sortRun(int* lenArrs, int lenArrsLen, void (*sortFun)(int*, int),
+	     int* (*genFun)(int) ){
   duration = 0;
   durationAvg = 0; 
     for(int i = 0; i < lenArrsLen; i++){
        for(int k = 0; k < ITERATE; k++){
 	 //loop for each Len in LEN_CONST
 	 //create a new array, populate array
-	 int* tbs = new int [lenArrs[i]];
-	 for(int j =0; j<lenArrs[i]; j++){
-	   tbs[j] = (rand()%MAXVAL)+1;
-	 } 
+	 int* tbs = genFun(lenArrs[i]); 
 	 // print_array(lenArrs[i],tbs); 
 	 start = clock(); 
 	 sortFun(tbs, lenArrs[i]);
@@ -169,12 +189,27 @@ void shellSort(int arr[], int n)
  
 int main(){
 
-  printf("Running BubbleSort Tests\n"); 
-  sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort);
+  printf("Running BubbleSort Tests\n");
+  printf("BubbleSort Random.\n"); 
+  sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateRandomArray);
+  printf("BubbleSort Sorted\n");
+  sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateSortedArray);
+  printf("BubbleSort Sorted\n"); 
+  sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateBackwardsArray);
   printf("Running ShellSort Tests\n");
-  sortRun(LEN_CONST, LEN_CONST_LEN, shellSort);
-  printf("Running Combsort Tests\n"); 
-  sortRun(LEN_CONST, LEN_CONST_LEN, combSort);
+  printf("ShellSort Random.\n"); 
+  sortRun(LEN_CONST, LEN_CONST_LEN,shellSort, generateRandomArray);
+  printf("ShellSort Sorted:\n");
+  sortRun(LEN_CONST, LEN_CONST_LEN, shellSort, generateSortedArray);
+  printf("ShellSort Backwards:\n");
+  sortRun(LEN_CONST, LEN_CONST_LEN, shellSort, generateBackwardsArray);
+  printf("Running Combsort Tests\n");
+  printf("combSort Random:\n"); 
+  sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateRandomArray);
+  printf("combSort Sorted:\n");
+  sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateSortedArray);
+  printf("combSort Backwards: \n");
+  sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateBackwardsArray);
   printf("Done tests\n"); 
   return 0; 
 
