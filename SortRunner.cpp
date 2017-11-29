@@ -69,11 +69,11 @@ void sortRun(int* lenArrs, int lenArrsLen, void (*sortFun)(int*, int),
 	 sortFun(tbs, lenArrs[i]);
 	 end = clock(); 
 	 durationAvg += ( end - start ) / (double) CLOCKS_PER_SEC;
+	 free(tbs);
       //print_array(lenArrs[i],tbs);
        }
        duration = durationAvg/ITERATE;
        std::cout<<"time: "<< duration<<" length: " << lenArrs[i]<<'\n';
-       
     }
     
 }
