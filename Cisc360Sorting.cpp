@@ -279,7 +279,7 @@ int main(){
 	int threads = 4; //number of threads
 	int seed = 0; //seed is initial value given to random sequence generator
 	srand(seed); //random number generator
-	
+	/*
 	int *array = (int *)malloc(sizeof(int) * n);
 	
 	init_random_vector(n, array);
@@ -299,7 +299,7 @@ int main(){
 	
 	free(array);
 	
-	/*int *combArray = (int *)malloc(sizeof(int) * n);
+	int *combArray = (int *)malloc(sizeof(int) * n);
 	
 	init_random_vector(n, combArray);
 	
@@ -317,7 +317,7 @@ int main(){
 	}
 	
 	free(combArray);
-	
+	*/
 	int *shellArray = (int *)malloc(sizeof(int) * n);
 	
 	init_random_vector(n, shellArray);
@@ -336,7 +336,7 @@ int main(){
 	}
 	
 	free(shellArray);
-	*/
+	
 	return 0;
 	
 }
