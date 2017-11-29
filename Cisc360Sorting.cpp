@@ -6,14 +6,14 @@
 //http://www.geeksforgeeks.org/bubble-sort/
 void bubbleSort(int arr[], int n)
 {
-   int i, j;
+   int i, j, temp;
    for (i = 0; i < n-1; i++)      
  
        // Last i elements are already in place   
        for (j = 0; j < n-i-1; j++) 
            if (arr[j] > arr[j+1])
               //swap(&arr[j], &arr[j+1]);
-				int temp = arr[j];
+				temp = arr[j];
 				arr[j] = arr[j+1];
 				arr[j+1] = temp;
 }
@@ -133,7 +133,7 @@ void combsort(int a[], int aSize)
 void combSort_Par(int array[], int n, int threads)
 {
     int gap = n;
-	int temp, i, swapped, j, m;
+	int temp, i, j, m;
     bool swapped = true;
 	#pragma omp parallel shared(array, n) num_threads(threads)
 	//i think i need to add private(temp, j, m, n)
@@ -242,7 +242,7 @@ void insertionsort(int a[], int n, int stride)
 void shellSort_Par(int a[], int n, int threads)
 {
     int i, m;
-    #pragme omp parallel shared(a,m,n) private(i) num_threads(threads)
+	#pragma omp parallel shared(a,m,n) private(i) num_threads(threads)
     for(m = n/2; m > 0; m /= 2)
     {
             #pragma omp for
@@ -275,7 +275,7 @@ void init_random_vector(int n, int array[]) {
 
 
 int main(){
-	int n = 100; //size of array
+	int n = 10; //size of array
 	int threads = 32; //number of threads
 	int seed = 0; //seed is initial value given to random sequence generator
 	srand(seed); //random number generator
