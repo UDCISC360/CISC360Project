@@ -168,7 +168,7 @@ void combSort_Par(int array[], int n, int threads)
 			else
 			{
 				#pragma omp for
-				for(h = 0; h < ((n-gap)/2)-1; n++)
+				for(h = 0; h < ((n-gap)/2)-1; h++)
 				{
 					j = h + gap;
 					if(array[h] > array[j])
