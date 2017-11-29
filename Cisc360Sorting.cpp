@@ -98,8 +98,8 @@ void combSort(int a[], int n)
 int newgap(int gap)
 {
     gap = (gap * 10) / 13;
-    if (gap == 9 || gap == 10)
-        gap = 11;
+    /*if (gap == 9 || gap == 10)
+        gap = 11;*/
     if (gap < 1)
         gap = 1;
     return gap;
@@ -133,8 +133,8 @@ void combSort_Par(int array[], int n, int threads)
 {
     int gap = n;
 	int temp, i, j, m, h;
-    bool swapped = true;
-	#pragma omp parallel shared(array, n, gap, swapped) private(temp, j, m, i) num_threads(threads)
+    bool swapped = 1;
+	#pragma omp parallel shared(array, n) private(temp, j, m, i, swapped, gap) num_threads(threads)
 	//i think i need to add private(temp, j, m, n)
 	//swapped is shared? gap is shared? make i shared?
 	for(;;)//basically while(true)
