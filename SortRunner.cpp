@@ -247,7 +247,7 @@ int newgap(int gap)
 void combSort_Par(int array[], int n, int threads)
 {
     int gap = n;
-	int temp, i, j, m, h;
+    int temp, i, j, m, h;
     bool swapped = 1;
 	#pragma omp parallel shared(array, n) private(temp, j, m, i, swapped, gap) num_threads(threads)
 	//i think i need to add private(temp, j, m, n)
@@ -311,7 +311,7 @@ void combSort_Par(int array[], int n, int threads)
 void shellSort_Par(int a[], int n, int threads)
 {
     int i, m;
-	#pragma omp parallel shared(a,m,n) private(i) num_threads(threads)
+    #pragma omp parallel shared(a,m,n) private(i) num_threads(threads)
     for(m = n/2; m > 0; m /= 2)
     {
             #pragma omp for
