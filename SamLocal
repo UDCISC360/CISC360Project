@@ -368,32 +368,6 @@ void init_random_vector(int n, int array[]) {
 }
  
 int main(){
-  /*
-  printf("Running BubbleSort Tests\n");
-  printf("BubbleSort Random.\n"); 
-  sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateRandomArray);
-  printf("BubbleSort Sorted\n");
-  sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateSortedArray);
-  printf("BubbleSort Sorted\n"); 
-  sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateBackwardsArray);
-  printf("Running ShellSort Tests\n");
-  printf("ShellSort Random.\n"); 
-  sortRun(LEN_CONST, LEN_CONST_LEN,shellSort, generateRandomArray);
-  printf("ShellSort Sorted:\n");
-  sortRun(LEN_CONST, LEN_CONST_LEN, shellSort, generateSortedArray);
-  printf("ShellSort Backwards:\n");
-  sortRun(LEN_CONST, LEN_CONST_LEN, shellSort, generateBackwardsArray);
-  printf("Running Combsort Tests\n");
-  printf("combSort Random:\n"); 
-  sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateRandomArray);
-  printf("combSort Sorted:\n");
-  sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateSortedArray);
-  printf("combSort Backwards: \n");
-  sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateBackwardsArray);
-  printf("Done tests\n");
-  */ 
-	
-
 	printf("Running Parallel BubbleSort Tests\n");
 	printf("Parallel BubbleSort Random.\n"); 
 	parSortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort_Par, generateRandomArray);
