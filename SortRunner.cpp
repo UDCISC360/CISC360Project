@@ -11,10 +11,10 @@
 #include <string.h>
 
 int ITERATE = 10; //number of iterations for each test. 
-int LEN_CONST [7] = {100, 200, 500, 1000, 5000, 10000, 15000};
-int LEN_CONST_LEN = 7;
+int LEN_CONST [8] = {1,10,100,1000,5000,10000,100000,1000000};
+int LEN_CONST_LEN = 8;
 int MAXVAL = 10000;
-int NUMTHREADS = 4; 
+int NUMTHREADS = 8; 
 
 int testArray[3] = {1, 10, 100};
 int testArrLen = 3;
@@ -82,10 +82,11 @@ int * generateBackwardsArray(int len){
 
 void sortRun(int* lenArrs, int lenArrsLen,
 	void (*sortFun)(int*, int), int* (*genFun)(int) ){
-	duration = 0;
-	durationAvg = 0; 
+	
     for(int i = 0; i < lenArrsLen; i++)
 	{
+	  duration = 0;
+	  durationAvg = 0; 
 		for(int k = 0; k < ITERATE; k++)
 		{
 			//loop for each Len in LEN_CONST
@@ -329,22 +330,24 @@ void parSortRun(int* lenArrs, int lenArrsLen, void (*sortFun)(int*, int, int), i
 {
 	int* tbs;
 	int a, b;
-	duration = 0;
-	durationAvg = 0; 
+	 
 	for(a = 0; a < lenArrsLen; )
+	 
 	{
+	  duration = 0;
+	  durationAvg = 0; 
 		for(b = 1; b <= ITERATE; )
 		{
 			tbs = genFun(lenArrs[a]);  
-			start = clock(); 
+			start = omp_get_wtime(); 
 			sortFun(tbs, lenArrs[a], NUMTHREADS);
-			end = clock(); 
-			durationAvg += ( end - start ) / (double) CLOCKS_PER_SEC;
+			end = omp_get_wtime(); 
+			durationAvg += ( end - start );
 			
 			b++;
 		}
 		duration = durationAvg/ITERATE;
-		std::cout<<"time: "<< duration<<" length: " << lenArrs[a]<<'\n';
+		printf("time:  %F  length:  + %d + \n", duration, lenArrs[a]);
 		a++;
     }
 	free(tbs);
@@ -367,7 +370,36 @@ void init_random_vector(int n, int array[]) {
 }
  
 int main(){
-	printf("Running Parallel BubbleSort Tests\n");
+
+  /*
+  	printf("Running BubbleSort Tests\n");
+	printf("BubbleSort Random.\n"); 
+	sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateRandomArray);
+	printf("BubbleSort Sorted\n");
+	sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateSortedArray);
+	printf(" BubbleSort Backwards\n"); 
+	sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateBackwardsArray);
+	printf("Running ShellSort Tests\n");
+	printf("ShellSort Random.\n"); 
+	sortRun(LEN_CONST, LEN_CONST_LEN, shellSort, generateRandomArray);
+	printf("ShellSort Sorted:\n");
+	sortRun(LEN_CONST, LEN_CONST_LEN, shellSort, generateSortedArray);
+	printf("ShellSort Backwards:\n");
+	sortRun(LEN_CONST, LEN_CONST_LEN, shellSort, generateBackwardsArray);
+	
+	
+	printf("Running Combsort Tests\n");
+	printf(" CombSort Random:\n"); 
+	sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateRandomArray);
+	printf("CombSort Sorted \n");
+	sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateSortedArray);
+	printf("CombSort Backwards");
+	sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateBackwardsArray);
+  */ 
+
+
+  
+  	printf("Running Parallel BubbleSort Tests\n");
 	printf("Parallel BubbleSort Random.\n"); 
 	parSortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort_Par, generateRandomArray);
 	printf("ParallelBubbleSort Sorted\n");
@@ -385,7 +417,7 @@ int main(){
 	THERE IS A BUG WHERE IT DOES NOT RUN ONE COMBSORT AFTER ANOTHER AND WORKS WHEN
 	USING CIN.GET() AND HAVING USER HIT ENTER
 	Side Note: CombSort will run worse because of extra loops for parallelization?
-	*/
+	
 	printf("ParallelRunning Combsort Tests\n");
 	printf("Parallel CombSort Random:\n"); 
 	parSortRun(LEN_CONST, LEN_CONST_LEN, combSort_Par, generateRandomArray);
@@ -395,6 +427,6 @@ int main(){
 	printf("Parallel CombSort Backwards (HIT ENTER): \n");
 	std::cin.get();
 	parSortRun(LEN_CONST, LEN_CONST_LEN, combSort_Par, generateBackwardsArray);
-	
+	*/
 	return 0; 
 }
