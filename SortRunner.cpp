@@ -11,7 +11,7 @@
 #include <string.h>
 
 int ITERATE = 10; //number of iterations for each test. 
-int LEN_CONST [8] = {1,10,100,1000,5000,10000,100000,1000000};
+int LEN_CONST [8] = {100,1000,5000,10000, 50000, 100000, 500000,1000000};
 int LEN_CONST_LEN = 8;
 int MAXVAL = 10000;
 int NUMTHREADS = 8; 
@@ -19,7 +19,9 @@ int NUMTHREADS = 8;
 int testArray[3] = {1, 10, 100};
 int testArrLen = 3;
 std::clock_t start;
-std::clock_t end; 
+std::clock_t end;
+double parStart;
+double parEnd; 
 double durationAvg;
 double duration;
 
@@ -326,6 +328,16 @@ void parSortRun(int* lenArrs, int lenArrsLen,
     
 }
 */
+
+void test_correctness(int n, int array[]) {
+  int i;
+  for (i = 1; i < n; i++) {
+    if (array[i] < array[i - 1]) {
+      printf("Correctness test found error at %d: %.4f is not < %.4f but appears before it\n", i, array[i - 1], array[i]);
+    }
+  }
+}
+
 void parSortRun(int* lenArrs, int lenArrsLen, void (*sortFun)(int*, int, int), int* (*genFun)(int) )
 {
 	int* tbs;
@@ -339,29 +351,23 @@ void parSortRun(int* lenArrs, int lenArrsLen, void (*sortFun)(int*, int, int), i
 		for(b = 1; b <= ITERATE; )
 		{
 			tbs = genFun(lenArrs[a]);  
-			start = omp_get_wtime(); 
+			parStart = omp_get_wtime(); 
 			sortFun(tbs, lenArrs[a], NUMTHREADS);
-			end = omp_get_wtime(); 
-			durationAvg += ( end - start );
+			parEnd = omp_get_wtime(); 
+			durationAvg += ( parEnd - parStart );
 			
 			b++;
 		}
 		duration = durationAvg/ITERATE;
 		printf("time:  %F  length:  + %d + \n", duration, lenArrs[a]);
+		test_correctness(lenArrs[a], tbs); 
 		a++;
     }
 	free(tbs);
     
 }
 
-void test_correctness(int n, int array[]) {
-  int i;
-  for (i = 1; i < n; i++) {
-    if (array[i] < array[i - 1]) {
-      printf("Correctness test found error at %d: %.4f is not < %.4f but appears before it\n", i, array[i - 1], array[i]);
-    }
-  }
-}
+
 void init_random_vector(int n, int array[]) {
   int i;
   for (i = 0; i < n; i++) {
@@ -371,7 +377,7 @@ void init_random_vector(int n, int array[]) {
  
 int main(){
 
-  /*
+ 
   	printf("Running BubbleSort Tests\n");
 	printf("BubbleSort Random.\n"); 
 	sortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort, generateRandomArray);
@@ -395,7 +401,7 @@ int main(){
 	sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateSortedArray);
 	printf("CombSort Backwards");
 	sortRun(LEN_CONST, LEN_CONST_LEN, combSort, generateBackwardsArray);
-  */ 
+ 
 
 
   
@@ -408,7 +414,7 @@ int main(){
 	parSortRun(LEN_CONST, LEN_CONST_LEN, bubbleSort_Par, generateBackwardsArray);
 	printf("Running Parallel ShellSort Tests\n");
 	printf("Parallel ShellSort Random.\n"); 
-	parSortRun(LEN_CONST, LEN_CONST_LEN, shellSort_Par, generateRandomArray);
+       	parSortRun(LEN_CONST, LEN_CONST_LEN, shellSort_Par, generateRandomArray);
 	printf("Parallel ShellSort Sorted:\n");
 	parSortRun(LEN_CONST, LEN_CONST_LEN, shellSort_Par, generateSortedArray);
 	printf("Parallel ShellSort Backwards:\n");
