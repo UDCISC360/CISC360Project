@@ -419,6 +419,9 @@ int main(){
 	parSortRun(LEN_CONST, LEN_CONST_LEN, shellSort_Par, generateSortedArray);
 	printf("Parallel ShellSort Backwards:\n");
 	parSortRun(LEN_CONST, LEN_CONST_LEN, shellSort_Par, generateBackwardsArray);
+	
+	//note - CombSort was taken out due to bugs. Run CombSortOnly if you want to 
+	//see performance. 
 	/*
 	THERE IS A BUG WHERE IT DOES NOT RUN ONE COMBSORT AFTER ANOTHER AND WORKS WHEN
 	USING CIN.GET() AND HAVING USER HIT ENTER
